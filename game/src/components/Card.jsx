@@ -10,7 +10,7 @@ const Card = ({
       <img 
         src={src} 
         alt={alt} 
-        className="size-full object-cover"
+        className="h-md w-md object-cover"
       />
     </div>
   );
