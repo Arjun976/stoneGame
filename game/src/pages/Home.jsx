@@ -18,9 +18,14 @@ function Home() {
     label: '',
     value: null
   })
-  const [win, setWin] = useState(null)
+  const [userWin, setUserWin] = useState(null)
+  const [systemWin, setSystemWin] = useState(null)
   const [scoreCountUser,setScoreCountUser] = useState(0)
   const [scoreCountSystem,setScoreCountSystem] = useState(0)
+  const [scoreBoard, setScoreBoard] = useState({
+    user:0,
+    system:0
+  })
 
 
    const images = [paper1,rock1, scissor1]
@@ -42,10 +47,6 @@ function Home() {
     setSystemSelect({label: getLabel(randomNumber), value: images[randomNumber]})
    }
 
-   const ShowAnimataion = ()=>{
-    return  <Confetti />
-   }
-
    useEffect(()=>{
     if(select.label==='paper' && systemSelect.label === 'rock')setScoreCountUser((prev)=>prev+1)
     if(select.label==='rock' && systemSelect.label === 'scissor')setScoreCountUser((prev)=>prev+1)
@@ -59,19 +60,25 @@ function Home() {
 
    useEffect(()=>{
     if(scoreCountUser===5){
-      setWin(true)
+      setScoreBoard((prev)=>{
+        return {user: prev.user+1,system:prev.system}
+      })
+      setUserWin(true)
       setScoreCountSystem(0)
       setScoreCountUser(0)
       setTimeout(()=>{
-        setWin(null)
+        setUserWin(false)
     },10000)
     }
     if(scoreCountSystem===5){
-      setWin(false)
+      setScoreBoard((prev)=>{
+        return {user: prev.user,system:prev.system+1}
+      })
+      setSystemWin(true)
       setScoreCountSystem(0)
       setScoreCountUser(0)
       setTimeout(()=>{
-        setWin(null)
+         setSystemWin(false)
     },10000)
     }
    },[scoreCountUser,scoreCountSystem])
@@ -140,7 +147,20 @@ function Home() {
         </div>
       </div>
       </div>
+      <div className='w-full flex items-center justify-center'>
+        <table className='table-auto'>
+          <tr>
+            <th className='p-2 border'>user</th>
+            <th className='p-2 border'>system</th>
+          </tr>
+          <tr>
+            <td className='p-2 border text-center'>{scoreBoard.user}</td>
+            <td className='p-2 border text-center'>{scoreBoard.system}</td>
+          </tr>
+        </table>
+      </div>
     </div>
+
   );
 }
 
